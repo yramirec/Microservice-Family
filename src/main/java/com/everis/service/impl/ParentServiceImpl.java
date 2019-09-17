@@ -3,43 +3,62 @@ package com.everis.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.everis.dao.IParentDao;
-import com.everis.domain.Parent;
-import com.everis.service.IParentService;
+import com.everis.model.Parent;
+import com.everis.repository.ParentRepository;
+import com.everis.service.ParentService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class ParentServiceImpl implements IParentService {
+public class ParentServiceImpl implements ParentService {
 	
 	@Autowired
-	private IParentDao dao;
-
+	private ParentRepository parentRepository;
+	
 	@Override
-	public void create(Parent p) {
-		dao.save(p).subscribe();
-		
+	public Mono<Parent> create(Parent Parent) {
+		return parentRepository.save(Parent);
 	}
 
 	@Override
 	public Mono<Parent> findById(String id) {
-		return dao.findById(id);
+		return parentRepository.findById(id);
 	}
 
 	@Override
 	public Flux<Parent> findAll() {
-		return dao.findAll();
+		return parentRepository.findAll();
+	}
+	
+	@Override
+	public Mono<Parent> update(String id, Parent updateParent) {
+		return parentRepository.findById(id)
+		        .map(existingParent -> existingParent.toBuilder()
+		        		.fullName(updateParent.getFullName())
+		        		.gender(updateParent.getGender())
+						.dateOfBirth(updateParent.getDateOfBirth())
+						.typeDocument(updateParent.getTypeDocument())
+						.numberDocument(updateParent.getNumberDocument())
+		              .build())
+		        .flatMap(parentRepository::save);
+	}
+	
+
+	@Override
+	public Mono<Parent> deleteById(String id) {
+		return parentRepository.findById(id)
+		        .flatMap(parent -> parentRepository.delete(parent).then(Mono.just(parent)));
 	}
 
 	@Override
-	public Mono<Parent> update(Parent p) {
-		return dao.save(p);
+	public Flux<Parent> findByFullName(String fullName) {
+		return parentRepository.findByFullName(fullName);
 	}
 
 	@Override
-	public Mono<Void> delete(String id) {
-		return dao.deleteById(id);
+	public Flux<Parent> findByNumberDocument(int numberDocument) {
+		return parentRepository.findByNumberDocument(numberDocument);
 	}
 	
 	
