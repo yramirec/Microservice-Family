@@ -7,10 +7,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
 
 @EnableSwagger2WebFlux
 @SpringBootApplication
-public class MicroserviceParentApplication {
+public class MicroserviceBApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MicroserviceParentApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(MicroserviceBApplication.class, args);
+  }
 
 }
