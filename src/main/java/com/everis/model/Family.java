@@ -15,7 +15,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collection = "students")
+@Document(collection = "families")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
